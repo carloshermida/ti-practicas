@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<settings>
+  <connector>
+    <saved-state fixedSizes="false" escapeSequence="" fieldSeparator=";" stringQualifierEscapeSequence="" recordLength="-1" numberOfLinesInFooter="0" encoding="UTF-8" lineWithColumnNames="6" ignoredRowRegEx="" recordSeparator="\r\n" stringQualifier="" numberOfLinesInHeader="6">
+      <columns>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_signatura_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_codigo_recurso_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_denominacion_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_direccion_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_parroquia_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_lugar_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_codigo_postal_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_municipio_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_provincia_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_telefono_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_tipo_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_categoria_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_modalidad_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="STRING" name="_especialidad_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="" maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="INTEGER" name="_habitaciones_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="," maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="INTEGER" name="_plazas_" columnWidth="0" maxDecimalPlaces="0" dateFormatLocale="en_GB" numberGroupSeparator="," maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="FLOAT" name="_latitud_" columnWidth="0" maxDecimalPlaces="13" dateFormatLocale="en_GB" numberGroupSeparator="," maxWidth="-1"/>
+        <textColumnMetaData useInReaderOut="true" decimalSeparator="." booleanTrueValue="1" booleanFalseValue="0" dataType="FLOAT" name="_longitud_" columnWidth="0" maxDecimalPlaces="14" dateFormatLocale="en_GB" numberGroupSeparator="," maxWidth="-1"/>
+      </columns>
+    </saved-state>
+  </connector>
+</settings>

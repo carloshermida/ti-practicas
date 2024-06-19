@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<purity-config version="11.1.1.ga-2017-06-14">
+	<references/>
+	<component-mappings>
+		<propertyMappings/>
+	</component-mappings>
+
+<!-- (Profiling) --><step mode="NORMAL" className="com.ataccama.dqc.tasks.profiling.ProfilingAlgorithm" disabled="false" id="Profiling">
+		<properties defaultLocale="en_US" outputFile="../PROFILE/nacional.profile" outputLimit="1000" threaded="true">
+			<businessDomains strictThreshold="25.0" looseThreshold="20.0"/>
+			<domains>
+				<customs/>
+				<datetime active="true" threshold="80"/>
+				<enum valueCountLimit="20" active="true"/>
+				<numeric active="true" threshold="80"/>
+				<pattern active="true" patternCountLimit="10"/>
+				<specval active="true" gradientThreshold="100"/>
+			</domains>
+			<fkAnalysis/>
+			<inputs>
+				<profilingInput name="in" drillThrough="false">
+					<businessRules/>
+					<dataToProfile>
+						<profiledData expression="mes" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="mun_orig_cod" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="mun_orig" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="dest_cod" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="dest" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="turistas" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="prov_orig_cod" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="prov_orig" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="prov_dest_cod" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+						<profiledData expression="prov_dest" maskName="characters" analyseBusinessDomain="false" analyseDomain="true">
+							<frequencyAnalysis calculate="true"/>
+							<groupSizeAnalysis calculate="true"/>
+							<standardStats quantiles="10" calculate="true" extremes="5" calculateAggregated="true"/>
+						</profiledData>
+					</dataToProfile>
+					<dependencies>
+						<dependencyAnalysis name="mun_dest - codigo">
+							<dependants>
+								<dependant expression="dest" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="dest_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+						<dependencyAnalysis name="mun_orig - codigo">
+							<dependants>
+								<dependant expression="mun_orig" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="mun_orig_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+						<dependencyAnalysis name="prov_orig - codigo">
+							<dependants>
+								<dependant expression="prov_orig" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="prov_orig_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+						<dependencyAnalysis name="prov_dest - codigo">
+							<dependants>
+								<dependant expression="prov_dest" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="prov_dest_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+						<dependencyAnalysis name="mun_dest - prov_dest">
+							<dependants>
+								<dependant expression="prov_dest + prov_dest_cod" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="dest + dest_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+						<dependencyAnalysis name="mun_orig - prov_orig">
+							<dependants>
+								<dependant expression="prov_orig + prov_orig_cod" threshold="90"/>
+							</dependants>
+							<determinant>
+								<keyComponent expression="mun_orig + mun_orig_cod"/>
+							</determinant>
+						</dependencyAnalysis>
+					</dependencies>
+					<pkAnalysis>
+						<pkAnalysis name="Code key">
+							<components>
+								<keyComponent expression="mun_orig_cod + dest_cod"/>
+							</components>
+						</pkAnalysis>
+						<pkAnalysis name="Natural key">
+							<components>
+								<keyComponent expression="mun_orig + dest"/>
+							</components>
+						</pkAnalysis>
+					</pkAnalysis>
+					<rollUps/>
+				</profilingInput>
+			</inputs>
+			<masks>
+				<maskCfg copyOther="true" name="characters">
+					<characterGroups>
+						<characterGroup characters="[:letter:]" symbol="L"/>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="words">
+					<characterGroups>
+						<characterGroup repeatedSymbol="W" characters="[:letter:]" symbol="L" repeatedThreshold="2"/>
+						<characterGroup repeatedSymbol="N" characters="[:digit:]" symbol="D" repeatedThreshold="2"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="case_sensitive">
+					<characterGroups>
+						<characterGroup characters="[:lowercase:]" symbol="L"/>
+						<characterGroup characters="[:uppercase:]" symbol="U"/>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="mask_digits">
+					<characterGroups>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+			</masks>
+			<userMetadata>
+				<items/>
+			</userMetadata>
+		</properties>
+		<visual-constraints layout="vertical" bounds="240,216,48,48"/>
+	</step>
+
+
+
+<!-- (exp_tmov_interno_mun_2023) --><step mode="NORMAL" className="com.ataccama.dqc.tasks.msoffice.excel.read.ExcelFileReader" disabled="false" id="exp_tmov_interno_mun_2023">
+		<properties fileName="../DATA/exp_tmov_interno_mun_2023.xlsx" sheetName="2023-05" startCell="A2" skipEmptyRows="false" useModelApi="false">
+			<columns>
+				<columnDef name="mes" type="STRING"/>
+				<columnDef name="mun_orig_cod" type="STRING"/>
+				<columnDef name="mun_orig" type="STRING"/>
+				<columnDef name="dest_cod" type="STRING"/>
+				<columnDef name="dest" type="STRING"/>
+				<columnDef name="turistas" type="INTEGER"/>
+				<columnDef name="prov_orig_cod" type="STRING"/>
+				<columnDef name="prov_orig" type="STRING"/>
+				<columnDef name="prov_dest_cod" type="STRING"/>
+				<columnDef name="prov_dest" type="STRING"/>
+			</columns>
+			<shadowColumns/>
+		</properties>
+		<visual-constraints layout="vertical" bounds="240,72,-1,-1"/>
+	</step>
+	<connection className="com.ataccama.dqc.model.elements.connections.StandardFlowConnection" disabled="false">
+		<source endpoint="out" step="exp_tmov_interno_mun_2023"/>
+		<target endpoint="in" step="Profiling"/>
+		<visual-constraints>
+			<bendpoints/>
+		</visual-constraints>
+	</connection>
+
+</purity-config>

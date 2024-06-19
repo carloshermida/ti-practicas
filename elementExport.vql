@@ -1,0 +1,417 @@
+﻿# Generated with Denodo Platform 8.0 update 20220815.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# #######################################
+# FOLDERS
+# #######################################
+CREATE OR REPLACE FOLDER '/trabajoJULIO' ;
+
+CREATE OR REPLACE FOLDER '/trabajojulio/1 data sources' ;
+
+CREATE OR REPLACE FOLDER '/trabajojulio/2 base views' ;
+
+CREATE OR REPLACE FOLDER '/trabajojulio/3 derived views' ;
+
+CREATE OR REPLACE FOLDER '/trabajojulio/4 data services' ;
+
+# #######################################
+# DATASOURCES
+# #######################################
+CREATE OR REPLACE DATASOURCE CUSTOM internacional
+    FOLDER = '/trabajojulio/1 data sources'
+    CLASSNAME='com.denodo.vdb.contrib.wrapper.xls.ExcelWrapper';
+
+CREATE OR REPLACE DATASOURCE CUSTOM nacional
+    FOLDER = '/trabajojulio/1 data sources'
+    CLASSNAME='com.denodo.vdb.contrib.wrapper.xls.ExcelWrapper';
+
+CREATE OR REPLACE DATASOURCE DF alojamientos
+    FOLDER = '/trabajojulio/1 data sources'
+    ROUTE LOCAL 'LocalConnection' 'C:/Ataccama DQ Analyzer 11/workspace/trabajoJULIO/DATA/reat_directorio-alojamientos_esp.csv' FILENAMEPATTERN = ''
+    COLUMNDELIMITER = ';'
+    ENDOFLINEDELIMITER = '\n'
+    BEGINDELIMITER = '(.*\n)(.*\n)(.*\n)(.*\n)(.*\n)'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE JDBC padron
+    FOLDER = '/trabajojulio/1 data sources'
+    DRIVERCLASSNAME = 'com.mysql.jdbc.Driver'
+    DATABASEURI = 'jdbc:mysql://localhost:3306/padron'
+    USERNAME = 'user'
+    USERPASSWORD = '6uH+RBFYGhyMaRlSV4J94qfjiMtpLu+czEjwPbhInKVaXcriKLReXzT4K+3+l8s4XtwTGChkYH7BNfYwGOCnwiWxDkBU47Crt36rWVpVcatRHN8cDRCMRBGBdO0ccHcg' ENCRYPTED
+    CLASSPATH = 'mysql-5'
+    DATABASENAME = 'mysql'
+    DATABASEVERSION = '5'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('vdp.streamRows'='yes')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+        USEEXTERNALTABLES ( 
+            ONMOVEREAD = false,
+            ONMOVEWRITE = true
+        )
+    );
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER CUSTOM internacional
+    FOLDER = '/trabajojulio/1 data sources'
+    DATASOURCENAME=internacional
+    PARAMETERS (
+      'Type of file' = 'Excel 2007 or later (*.xlsx)',
+      'File location' = ROUTE LOCAL 'LocalConnection' 'C:/Ataccama DQ Analyzer 11/workspace/trabajoJULIO/DATA/exp_tmov_receptor_mun_2023.xlsx',
+      'Worksheet' = 'm05_2023',
+      'Extract data from all sheets' = false,
+      'Extract sheet name as a new column' = false,
+      'Has headers' = true,
+      'Stream tuples' = false
+    )
+    OUTPUTSCHEMA (
+        mes = 'mes' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        pais_orig_cod = 'pais_orig_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        pais_orig = 'pais_orig' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        mun_dest_cod = 'mun_dest_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        mun_dest = 'mun_dest' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        turistas = 'turistas' : 'java.lang.Double' (OPT) (sourcetypeid='8')  SORTABLE,
+        prov_dest_cod = 'prov_dest_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        prov_dest = 'prov_dest' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER CUSTOM nacional
+    FOLDER = '/trabajojulio/1 data sources'
+    DATASOURCENAME=nacional
+    PARAMETERS (
+      'Type of file' = 'Excel 2007 or later (*.xlsx)',
+      'File location' = ROUTE LOCAL 'LocalConnection' 'C:/Ataccama DQ Analyzer 11/workspace/trabajoJULIO/DATA/exp_tmov_interno_mun_2023.xlsx',
+      'Worksheet' = '2023-05',
+      'Extract data from all sheets' = false,
+      'Extract sheet name as a new column' = false,
+      'Has headers' = true,
+      'Stream tuples' = false
+    )
+    OUTPUTSCHEMA (
+        mes = 'mes' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        mun_orig_cod = 'mun_orig_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        mun_orig = 'mun_orig' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        dest_cod = 'dest_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        dest = 'dest' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        turistas = 'turistas' : 'java.lang.Double' (OPT) (sourcetypeid='8')  SORTABLE,
+        prov_orig_cod = 'prov_orig_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        prov_orig = 'prov_orig' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        prov_dest_cod = 'prov_dest_cod' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        prov_dest = 'prov_dest' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER DF alojamientos
+    FOLDER = '/trabajojulio/2 base views'
+    DATASOURCENAME=alojamientos
+    OUTPUTSCHEMA (
+        signatura_0 = '"signatura"',
+        codigo_recurso_0 = '"codigo_recurso"',
+        denominacion_0 = '"denominacion"',
+        direccion_0 = '"direccion"',
+        parroquia_0 = '"parroquia"',
+        lugar_0 = '"lugar"',
+        codigo_postal_0 = '"codigo_postal"',
+        municipio_0 = '"municipio"',
+        provincia_0 = '"provincia"',
+        telefono_0 = '"telefono"',
+        tipo_0 = '"tipo"',
+        categoria_0 = '"categoria"',
+        modalidad_0 = '"modalidad"',
+        especialidad_0 = '"especialidad"',
+        habitaciones_0 = '"habitaciones"',
+        plazas_0 = '"plazas"',
+        latitud_0 = '"latitud"',
+        longitud_0 = '"longitud"'
+    );
+
+CREATE OR REPLACE WRAPPER JDBC padron_2022
+    FOLDER = '/trabajojulio/2 base views'
+    DATASOURCENAME=padron
+    CATALOGNAME='padron' 
+    RELATIONNAME='padron_2022' 
+    OUTPUTSCHEMA (
+        municipio = 'municipio' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        edad = 'edad' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        sexo = 'sexo' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        fecha = 'fecha' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        habitantes = 'habitantes' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
+    );
+
+# #######################################
+# BASE VIEWS
+# #######################################
+CREATE OR REPLACE TABLE alojamientos I18N gb (
+        signatura_0:text,
+        codigo_recurso_0:text,
+        denominacion_0:text,
+        direccion_0:text,
+        parroquia_0:text,
+        lugar_0:text,
+        codigo_postal_0:text,
+        municipio_0:text (description = 'municipio de alojamiento (formato ''A Coruña'')'),
+        provincia_0:text,
+        telefono_0:text,
+        tipo_0:text,
+        categoria_0:text,
+        modalidad_0:text,
+        especialidad_0:text,
+        habitaciones_0:text,
+        plazas_0:int (description = 'número de plazas del alojamiento'),
+        latitud_0:text,
+        longitud_0:text
+    )
+    FOLDER = '/trabajojulio/2 base views'
+    PRIMARY KEY ( 'codigo_recurso_0' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD alojamientos(
+        I18N gb
+        CONSTRAINTS (
+             ADD signatura_0 NOS ZERO ()
+             ADD codigo_recurso_0 NOS ZERO ()
+             ADD denominacion_0 NOS ZERO ()
+             ADD direccion_0 NOS ZERO ()
+             ADD parroquia_0 NOS ZERO ()
+             ADD lugar_0 NOS ZERO ()
+             ADD codigo_postal_0 NOS ZERO ()
+             ADD municipio_0 NOS ZERO ()
+             ADD provincia_0 NOS ZERO ()
+             ADD telefono_0 NOS ZERO ()
+             ADD tipo_0 NOS ZERO ()
+             ADD categoria_0 NOS ZERO ()
+             ADD modalidad_0 NOS ZERO ()
+             ADD especialidad_0 NOS ZERO ()
+             ADD habitaciones_0 NOS ZERO ()
+             ADD plazas_0 NOS ZERO ()
+             ADD latitud_0 NOS ZERO ()
+             ADD longitud_0 NOS ZERO ()
+        )
+        OUTPUTLIST (categoria_0, codigo_postal_0, codigo_recurso_0, denominacion_0, direccion_0, especialidad_0, habitaciones_0, latitud_0, longitud_0, lugar_0, modalidad_0, municipio_0, parroquia_0, plazas_0, provincia_0, signatura_0, telefono_0, tipo_0
+        )
+        WRAPPER (df alojamientos)
+    );
+
+CREATE OR REPLACE TABLE internacional I18N gb (
+        mes:text (sourcetypeid = '12'),
+        pais_orig_cod:text (sourcetypeid = '12'),
+        pais_orig:text (sourcetypeid = '12', description = 'país de origen (TOTAL es la suma de turistas internacionales)'),
+        mun_dest_cod:text (sourcetypeid = '12'),
+        mun_dest:text (sourcetypeid = '12', description = 'municipio de destino (formato ''Coruña, A'')'),
+        turistas:double (sourcetypeid = '8', description = 'número de turistas'),
+        prov_dest_cod:text (sourcetypeid = '12'),
+        prov_dest:text (sourcetypeid = '12')
+    )
+    FOLDER = '/trabajojulio/2 base views'
+    PRIMARY KEY ( 'pais_orig_cod' , 'mun_dest_cod' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD internacional(
+        I18N gb
+        CONSTRAINTS (
+             ADD mes (any) OPT ANY
+             ADD pais_orig_cod (any) OPT ANY
+             ADD pais_orig (any) OPT ANY
+             ADD mun_dest_cod (any) OPT ANY
+             ADD mun_dest (any) OPT ANY
+             ADD turistas (any) OPT ANY
+             ADD prov_dest_cod (any) OPT ANY
+             ADD prov_dest (any) OPT ANY
+        )
+        OUTPUTLIST (mes, mun_dest, mun_dest_cod, pais_orig, pais_orig_cod, prov_dest, prov_dest_cod, turistas
+        )
+        WRAPPER (custom internacional)
+    );
+
+CREATE OR REPLACE TABLE nacional I18N gb (
+        mes:text (sourcetypeid = '12'),
+        mun_orig_cod:text (sourcetypeid = '12'),
+        mun_orig:text (sourcetypeid = '12', description = 'municipio de origen'),
+        dest_cod:text (sourcetypeid = '12'),
+        dest:text (sourcetypeid = '12', description = 'municipio de destino (formato ''Coruña, A'')'),
+        turistas:double (sourcetypeid = '8', description = 'número de turistas'),
+        prov_orig_cod:text (sourcetypeid = '12'),
+        prov_orig:text (sourcetypeid = '12'),
+        prov_dest_cod:text (sourcetypeid = '12'),
+        prov_dest:text (sourcetypeid = '12')
+    )
+    FOLDER = '/trabajojulio/2 base views'
+    PRIMARY KEY ( 'mun_orig_cod' , 'dest_cod' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD nacional(
+        I18N gb
+        CONSTRAINTS (
+             ADD mes (any) OPT ANY
+             ADD mun_orig_cod (any) OPT ANY
+             ADD mun_orig (any) OPT ANY
+             ADD dest_cod (any) OPT ANY
+             ADD dest (any) OPT ANY
+             ADD turistas (any) OPT ANY
+             ADD prov_orig_cod (any) OPT ANY
+             ADD prov_orig (any) OPT ANY
+             ADD prov_dest_cod (any) OPT ANY
+             ADD prov_dest (any) OPT ANY
+        )
+        OUTPUTLIST (dest, dest_cod, mes, mun_orig, mun_orig_cod, prov_dest, prov_dest_cod, prov_orig, prov_orig_cod, turistas
+        )
+        WRAPPER (custom nacional)
+    );
+
+CREATE OR REPLACE TABLE padron I18N gb (
+        municipio:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = 'código + municipio (formato ''Coruña, A'')'),
+        edad:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = ''),
+        sexo:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = ''),
+        fecha:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = ''),
+        habitantes:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = 'número de habitantes')
+    )
+    FOLDER = '/trabajojulio/2 base views'
+    PRIMARY KEY ( 'municipio' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD padron_2022(
+        I18N gb
+        CONSTRAINTS (
+             ADD municipio (any) OPT ANY
+             ADD edad (any) OPT ANY
+             ADD sexo (any) OPT ANY
+             ADD fecha (any) OPT ANY
+             ADD habitantes (any) OPT ANY
+        )
+        OUTPUTLIST (edad, fecha, habitantes, municipio, sexo
+        )
+        WRAPPER (jdbc padron_2022)
+    );
+
+# #######################################
+# VIEWS
+# #######################################
+CREATE OR REPLACE VIEW internacional_solo_galicia FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'mun_dest' ) AS SELECT internacional.mun_dest AS mun_dest, internacional.turistas AS turistas_internacional FROM internacional WHERE (prov_dest in ('Coruña, A', 'Ourense', 'Pontevedra', 'Lugo') AND pais_orig like 'Total') ORDER BY mun_dest ASC;
+
+ALTER VIEW internacional_solo_galicia
+ LAYOUT (internacional = [327, 124, 200, 200]);
+
+CREATE OR REPLACE VIEW nacional_solo_galicia FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'dest' ) AS SELECT nacional.dest AS dest, sum(nacional.turistas) AS turistas_nacionales FROM nacional WHERE prov_dest in ('Coruña, A', 'Ourense', 'Pontevedra', 'Lugo') GROUP BY nacional.dest ORDER BY dest ASC;
+
+ALTER VIEW nacional_solo_galicia
+ LAYOUT (nacional = [455, 143, 200, 200]);
+
+CREATE OR REPLACE VIEW padron_mun_cod_separado FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'codigo' ) (
+    municipio (sourcetyperadix = '10', sourcetypesize = '500', description = 'municipio (formato ''Coruña, A'')', sourcetypeid = '12'),
+    habitantes (sourcetyperadix = '10', sourcetypesize = '500', description = 'número de habitantes', sourcetypeid = '12')
+ )
+ AS SELECT cast(substring(municipio, 0, position(' ' IN municipio)) AS INTEGER) AS codigo, substring(municipio, position(' ' IN municipio), len(municipio)) AS municipio, cast(replace(padron.habitantes, '.', '') AS INTEGER) AS habitantes FROM padron;
+
+ALTER VIEW padron_mun_cod_separado
+ LAYOUT (padron = [383, 168, 200, 200]);
+
+CREATE OR REPLACE VIEW vt_por_municipio FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) AS SELECT alojamientos.municipio_0 AS municipio, cast(count(alojamientos.codigo_recurso_0) AS FLOAT) AS numero_de_vt FROM alojamientos WHERE tipo_0 like 'VIVIENDAS DE USO TURÍSTICO' GROUP BY alojamientos.municipio_0 ORDER BY municipio ASC;
+
+ALTER VIEW vt_por_municipio
+ LAYOUT (alojamientos = [297, 140, 200, 200]);
+
+CREATE OR REPLACE VIEW padron_arreglado FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) (
+    municipio (sourcetyperadix = '10', sourcetypesize = '500', description = 'municipio (formato ''A Coruña'')', sourcetypeid = '12')
+ )
+ AS SELECT case WHEN (municipio like '%,%') THEN concat(substring(municipio, (position(',' IN municipio)+1), len(municipio)), ' ', substring(municipio, 0, (position(',' IN municipio)-1))) ELSE municipio END AS municipio, padron_mun_cod_separado.habitantes AS habitantes FROM padron_mun_cod_separado WHERE ((codigo like '15%' OR codigo like '36%' OR codigo like '27%' OR codigo like '32%') AND habitantes > 0) ORDER BY municipio ASC;
+
+ALTER VIEW padron_arreglado
+ LAYOUT (padron_mun_cod_separado = [367, 141, 200, 200]);
+
+CREATE OR REPLACE VIEW turismo_total_por_municipio FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) (
+    municipio (description = 'municipio de destino (formato ''A Coruña'')', sourcetypeid = '12'),
+    turistas_internacional (description = '', sourcetypeid = '8')
+ )
+ AS SELECT case WHEN (dest like '%,%') THEN concat(substring(dest, (position(',' IN dest)+1), len(dest)), ' ', substring(dest, 0, (position(',' IN dest)-1))) ELSE dest END AS municipio, nacional_solo_galicia.turistas_nacionales AS turistas_nacionales, coalesce(internacional_solo_galicia.turistas_internacional, 0) AS turistas_internacional FROM nacional_solo_galicia AS nacional_solo_galicia LEFT OUTER JOIN internacional_solo_galicia AS internacional_solo_galicia ON upper(nacional_solo_galicia.dest) = upper(internacional_solo_galicia.mun_dest)  ORDER BY municipio ASC;
+
+ALTER VIEW turismo_total_por_municipio
+ LAYOUT (nacional_solo_galicia = [319, 105, 200, 200], internacional_solo_galicia = [786, 104, 200, 200]);
+
+CREATE OR REPLACE VIEW municipio_vt_cada_100_hab FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) AS SELECT padron_arreglado.municipio AS municipio, vt_por_municipio.numero_de_vt AS numero_de_vt, padron_arreglado.habitantes AS habitantes, round(((numero_de_vt/habitantes)*100), 1) AS vt_cada_100_hab FROM vt_por_municipio AS vt_por_municipio LEFT OUTER JOIN padron_arreglado AS padron_arreglado ON vt_por_municipio.municipio = upper(padron_arreglado.municipio)  ORDER BY vt_cada_100_hab DESC;
+
+ALTER VIEW municipio_vt_cada_100_hab
+ LAYOUT (padron_arreglado = [823, 232, 200, 200], vt_por_municipio = [490, 272, 200, 200]);
+
+CREATE OR REPLACE VIEW top_municipios FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) AS SELECT municipio_vt_cada_100_hab.municipio AS municipio, municipio_vt_cada_100_hab.numero_de_vt AS numero_de_vt, municipio_vt_cada_100_hab.habitantes AS habitantes, municipio_vt_cada_100_hab.vt_cada_100_hab AS vt_cada_100_hab FROM municipio_vt_cada_100_hab WHERE vt_cada_100_hab >= 1;
+
+ALTER VIEW top_municipios
+ LAYOUT (municipio_vt_cada_100_hab = [444, 146, 200, 200]);
+
+CREATE OR REPLACE VIEW vista_final FOLDER = '/trabajojulio/3 derived views'
+    PRIMARY KEY ( 'municipio' ) (
+    numero_de_vt (description = 'numero de VUT, VT y AP'),
+    vt_cada_100_hab (description = 'viviendas de uso turístico por cada 100 habitantes'),
+    turistas_nacional_mayo_2023 (description = 'turistas nacionales recibidos en mayo de 2023'),
+    turistas_internacional_mayo_2023 (description = 'turistas internacionales recibidos en mayo de 2023'),
+    turistas_total_mayo_2023 (description = 'turistas totales recibidos en mayo de 2023')
+ )
+ AS SELECT top_municipios.municipio AS municipio, top_municipios.numero_de_vt AS numero_de_vt, top_municipios.habitantes AS habitantes, top_municipios.vt_cada_100_hab AS vt_cada_100_hab, turismo_total_por_municipio.turistas_nacionales AS turistas_nacional_mayo_2023, turismo_total_por_municipio.turistas_internacional AS turistas_internacional_mayo_2023, (turistas_nacionales+turistas_internacional) AS turistas_total_mayo_2023 FROM top_municipios AS top_municipios LEFT OUTER JOIN turismo_total_por_municipio AS turismo_total_por_municipio ON top_municipios.municipio = turismo_total_por_municipio.municipio  ORDER BY turistas_total_mayo_2023 DESC;
+
+ALTER VIEW vista_final
+ LAYOUT (top_municipios = [256, 154, 200, 200], turismo_total_por_municipio = [650, 161, 200, 200]);
+
+# #######################################
+# WEBSERVICES
+# #######################################
+CREATE OR REPLACE REST WEBSERVICE vista_final
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 1000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = true
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    DEFAULTREPRESENTATION = HTML
+    SUPPORTEDREPRESENTATIONS (HTML, XML, JSON)
+    RESOURCES (
+        VIEW vista_final FIELDS (
+            municipio : 'text', 
+            numero_de_vt : 'float', 
+            habitantes : 'int', 
+            vt_cada_100_hab : 'float', 
+            turistas_nacional_mayo_2023 : 'double', 
+            turistas_internacional_mayo_2023 : 'double', 
+            turistas_total_mayo_2023 : 'double' UNESCAPED
+        )
+    )
+    OPTIONS ( NULLVALUESASEMPTYXMLELEMENTS = false
+        ALLOW_CORS_ORIGINS (*) DISABLED
+        PROCESS_FUNCTIONS_IN_SELECT_PARAMETER = true ) 
+    OPENAPI2 ( API_VERSION = '1.0.0' ) 
+    FOLDER = '/trabajojulio/4 data services';
+
+UNDEPLOY IF EXISTS WEBSERVICE vista_final;
+
+DEPLOY WEBSERVICE vista_final LOGIN = 'admin' PASSWORD = 'nqYHeRPEltUPKXCdzJDUx1iTxugtDBRzDFzwdMgBXwYOhdFxLlir7jv0bss9oR27CWaChWJgkQYkmqFpP3LKhTFRZBRmXWSbisE5F7gamPsBS+jp5IPus2y6jG4RSlS5' ENCRYPTED;
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;

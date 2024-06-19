@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<purity-config version="11.1.1.ga-2017-06-14">
+	<references/>
+	<component-mappings>
+		<propertyMappings/>
+	</component-mappings>
+
+<!-- (Profiling) --><step mode="NORMAL" className="com.ataccama.dqc.tasks.profiling.ProfilingAlgorithm" disabled="false" id="Profiling">
+		<properties defaultLocale="en_US" outputFile="../PROFILE/nacional_internacional.profile" outputLimit="1000" threaded="true">
+			<businessDomains strictThreshold="25.0" looseThreshold="20.0"/>
+			<domains>
+				<customs/>
+				<datetime active="true" threshold="80"/>
+				<enum valueCountLimit="20" active="true"/>
+				<numeric active="true" threshold="80"/>
+				<pattern active="true" patternCountLimit="10"/>
+				<specval active="true" gradientThreshold="100"/>
+			</domains>
+			<fkAnalysis>
+				<fkAnalysis rightInputName="internacional" name="municipio_destino" leftInputName="nacional">
+					<components>
+						<fkComponent rightColumn="mun_dest" leftColumn="dest"/>
+					</components>
+				</fkAnalysis>
+			</fkAnalysis>
+			<inputs>
+				<profilingInput name="nacional" drillThrough="false">
+					<businessRules/>
+					<dataToProfile/>
+					<dependencies/>
+					<pkAnalysis/>
+					<rollUps/>
+				</profilingInput>
+				<profilingInput name="internacional" drillThrough="false">
+					<businessRules/>
+					<dataToProfile/>
+					<dependencies/>
+					<pkAnalysis/>
+					<rollUps/>
+				</profilingInput>
+			</inputs>
+			<masks>
+				<maskCfg copyOther="true" name="characters">
+					<characterGroups>
+						<characterGroup characters="[:letter:]" symbol="L"/>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="words">
+					<characterGroups>
+						<characterGroup repeatedSymbol="W" characters="[:letter:]" symbol="L" repeatedThreshold="2"/>
+						<characterGroup repeatedSymbol="N" characters="[:digit:]" symbol="D" repeatedThreshold="2"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="case_sensitive">
+					<characterGroups>
+						<characterGroup characters="[:lowercase:]" symbol="L"/>
+						<characterGroup characters="[:uppercase:]" symbol="U"/>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+				<maskCfg copyOther="true" name="mask_digits">
+					<characterGroups>
+						<characterGroup characters="[:digit:]" symbol="D"/>
+					</characterGroups>
+				</maskCfg>
+			</masks>
+			<userMetadata>
+				<items/>
+			</userMetadata>
+		</properties>
+		<visual-constraints layout="vertical" bounds="576,264,-1,-1"/>
+	</step>
+
+
+
+<!-- (exp_tmov_interno_mun_2023) --><step mode="NORMAL" className="com.ataccama.dqc.tasks.msoffice.excel.read.ExcelFileReader" disabled="false" id="exp_tmov_interno_mun_2023">
+		<properties fileName="../DATA/exp_tmov_interno_mun_2023.xlsx" sheetName="2023-05" startCell="A2" skipEmptyRows="false" useModelApi="false">
+			<columns>
+				<columnDef name="mes" type="STRING"/>
+				<columnDef name="mun_orig_cod" type="STRING"/>
+				<columnDef name="mun_orig" type="STRING"/>
+				<columnDef name="dest_cod" type="STRING"/>
+				<columnDef name="dest" type="STRING"/>
+				<columnDef name="turistas" type="INTEGER"/>
+				<columnDef name="prov_orig_cod" type="STRING"/>
+				<columnDef name="prov_orig" type="STRING"/>
+				<columnDef name="prov_dest_cod" type="STRING"/>
+				<columnDef name="prov_dest" type="STRING"/>
+			</columns>
+			<shadowColumns/>
+		</properties>
+		<visual-constraints layout="vertical" bounds="240,216,-1,-1"/>
+	</step>
+	<connection className="com.ataccama.dqc.model.elements.connections.StandardFlowConnection" disabled="false">
+		<source endpoint="out" step="exp_tmov_interno_mun_2023"/>
+		<target endpoint="nacional" step="Profiling"/>
+		<visual-constraints>
+			<bendpoints/>
+		</visual-constraints>
+	</connection>
+
+
+
+<!-- (exp_tmov_receptor_mun_2023) --><step mode="NORMAL" className="com.ataccama.dqc.tasks.msoffice.excel.read.ExcelFileReader" disabled="false" id="exp_tmov_receptor_mun_2023">
+		<properties fileName="../DATA/exp_tmov_receptor_mun_2023.xlsx" sheetName="m05_2023" startCell="A2" skipEmptyRows="false" useModelApi="false">
+			<columns>
+				<columnDef name="mes" type="STRING"/>
+				<columnDef name="pais_orig_cod" type="STRING"/>
+				<columnDef name="pais_orig" type="STRING"/>
+				<columnDef name="mun_dest_cod" type="STRING"/>
+				<columnDef name="mun_dest" type="STRING"/>
+				<columnDef name="turistas" type="INTEGER"/>
+				<columnDef name="prov_dest_cod" type="STRING"/>
+				<columnDef name="prov_dest" type="STRING"/>
+			</columns>
+			<shadowColumns/>
+		</properties>
+		<visual-constraints layout="vertical" bounds="912,216,-1,-1"/>
+	</step>
+	<connection className="com.ataccama.dqc.model.elements.connections.StandardFlowConnection" disabled="false">
+		<source endpoint="out" step="exp_tmov_receptor_mun_2023"/>
+		<target endpoint="internacional" step="Profiling"/>
+		<visual-constraints>
+			<bendpoints/>
+		</visual-constraints>
+	</connection>
+
+</purity-config>
